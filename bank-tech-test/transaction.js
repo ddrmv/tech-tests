@@ -2,7 +2,8 @@ class Transaction {
   constructor(type, amount) {
     if (!Number.isInteger(amount)) {
       throw "Amount has to be integer";
-    } else if (amount <= 0) {
+    }
+    if (amount <= 0) {
       throw "Amount has to be positive";
     }
     this.amount = amount;
