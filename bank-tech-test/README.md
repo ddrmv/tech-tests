@@ -1,3 +1,13 @@
+## Design
+
+### Initial design
+
+- Goals are to create uncoupled classes with appropriate levels of abstraction, separate view from content, provide good naming and structre
+
+![Excalidraw chart](./docs/initial-class-design.png)
+
+### TDD classes
+
 ## Specification
 
 ### Requirements
