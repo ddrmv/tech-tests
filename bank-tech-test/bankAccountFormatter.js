@@ -4,7 +4,8 @@ class BankAccountFormatter {
   }
 
   formatBankAccount() {
-    let statement = "date || credit || debit || balance\n";
+    let statement = "";
+
     for (let i = this.account.getEntries().length - 1; i >= 0; i--) {
       const entry = this.account.getEntries()[i];
       statement += `${this.formatDate(entry.getDate())}`;
@@ -15,7 +16,8 @@ class BankAccountFormatter {
       }
       statement += `${this.formatAmount(entry.getResultingBalance())}\n`;
     }
-    return statement.slice(0, -1);
+
+    return `date || credit || debit || balance\n${statement.slice(0, -1)}`;
   }
 
   formatDate = (date) => {
@@ -23,6 +25,7 @@ class BankAccountFormatter {
     const dateString = dateNumber < 10 ? `0${dateNumber}` : dateNumber;
     const monthNumber = date.getMonth() + 1;
     const monthString = monthNumber < 10 ? `0${monthNumber}` : monthNumber;
+
     return `${dateString}/${monthString}/${date.getFullYear()}`;
   };
 
@@ -31,6 +34,7 @@ class BankAccountFormatter {
     const length = string.length;
     const stringWithDot =
       string.slice(0, length - 2) + "." + string.slice(length - 2, length);
+
     return stringWithDot;
   };
 }

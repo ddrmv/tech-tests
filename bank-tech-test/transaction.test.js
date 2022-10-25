@@ -17,25 +17,31 @@ describe("Transaction", () => {
     expect(transaction.getTimeCreated()).toBeDefined();
   });
 
-  it("raises an error when passing invalid transaction type", () => {
+  it("throws an error when receiving invalid transaction type", () => {
     expect(() => {
       new Transaction("foo", 10);
     }).toThrow("Type has to be either 'debit' or 'credit'");
   });
 
-  it("raises an error when passing non-number", () => {
+  it("throws an error when receiving non-number", () => {
     expect(() => {
       new Transaction("credit", "1000");
     }).toThrow("Amount has to be integer");
   });
 
-  it("raises an error when passing a negative number", () => {
+  it("throws an error when receiving a float", () => {
+    expect(() => {
+      new Transaction("credit", 5.5);
+    }).toThrow("Amount has to be integer");
+  });
+
+  it("throws an error when receiving a negative number", () => {
     expect(() => {
       new Transaction("credit", -5);
     }).toThrow("Amount has to be positive");
   });
 
-  it("raises an error when passing a zero", () => {
+  it("throws an error when receiving a zero", () => {
     expect(() => {
       new Transaction("credit", 0);
     }).toThrow("Amount has to be positive");

@@ -21,6 +21,9 @@ class BankAccountEntry {
   }
 
   getType() {
+    if (this.transaction.isDebit() && this.transaction.isCredit()) {
+      throw "Error: transaction cannot be both credit and debit";
+    }
     if (this.transaction.isDebit()) {
       return "debit";
     }
