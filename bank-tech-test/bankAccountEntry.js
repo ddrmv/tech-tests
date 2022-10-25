@@ -25,12 +25,9 @@ class BankAccountEntry {
       return "debit";
     }
     if (this.transaction.isCredit()) {
-      console.log(
-        "THE ABOVE LINE ACTUALLY RUNS IN THE TEST",
-        "BUT APPEARS AS YELLOW IN COVERAGE REPORT"
-      );
       return "credit";
     }
+    throw "Error: transaction should be either credit or debit";
   }
 
   getAmount() {

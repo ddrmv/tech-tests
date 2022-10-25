@@ -38,6 +38,25 @@ describe("BankAccountEntry", () => {
     }).toThrow("Error: Type should be 'debit' or 'credit'");
   });
 
+  it("raises error if transaction is neither debit nor credit", () => {
+    const initialBalance = 1000;
+    const type = "credit";
+    const amount = 200;
+
+    Transaction.mockImplementation(() => {
+      return {
+        isDebit: () => false,
+        isCredit: () => false,
+        getAmount: () => 200,
+      };
+    });
+
+    entry = new BankAccountEntry(initialBalance, type, amount);
+    expect(() => {
+      entry.getType();
+    }).toThrow("Error: transaction should be either credit or debit");
+  });
+
   it("creates a credit account entry", () => {
     const initialBalance = 1000;
     const type = "credit";
