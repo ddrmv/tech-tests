@@ -40,6 +40,10 @@ class BankAccountEntry {
   getResultingBalance() {
     return this.resultingBalance;
   }
+
+  getDate() {
+    return this.transaction.getTimeCreated();
+  }
 }
 
 module.exports = BankAccountEntry;

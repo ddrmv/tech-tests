@@ -67,6 +67,7 @@ describe("BankAccountEntry", () => {
         isDebit: () => true,
         isCredit: () => false,
         getAmount: () => 200,
+        getTimeCreated: () => new Date(2022, 0, 1),
       };
     });
 
@@ -74,5 +75,6 @@ describe("BankAccountEntry", () => {
     expect(entry.getType()).toEqual("debit");
     expect(entry.getAmount()).toEqual(200);
     expect(entry.getResultingBalance()).toEqual(800);
+    expect(entry.getDate()).toEqual(new Date(2022, 0, 1));
   });
 });
