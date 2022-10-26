@@ -6,36 +6,55 @@ class BankStatementFormatter {
   formatBankStatement() {
     let statement = "";
 
-    for (let i = this.account.getEntries().length - 1; i >= 0; i--) {
-      const entry = this.account.getEntries()[i];
-      statement += `${this.formatDate(entry.getDate())}`;
-      if (entry.getType() === "credit") {
-        statement += ` || ${this.formatAmount(entry.getAmount())} || || `;
-      } else {
-        statement += ` || || ${this.formatAmount(entry.getAmount())} || `;
-      }
-      statement += `${this.formatAmount(entry.getResultingBalance())}\n`;
+    for (let row = this.account.getEntries().length - 1; row >= 0; row--) {
+      const entry = this.account.getEntries()[row];
+      statement += this.#formatRow(entry);
+      // if it's the last row, skip; otherwise add newline at the end
+      row == 0 ? {} : (statement += "\n");
     }
 
-    return `date || credit || debit || balance\n${statement.slice(0, -1)}`;
+    // is coded readidibility step preferred, or 1 line + comment as below?
+    const header = "date || credit || debit || balance";
+    return `${header}\n${statement}`;
+
+    // prepend header to statement
+    // return `date || credit || debit || balance\n${statement}`;
   }
 
-  formatDate = (date) => {
-    const dateNumber = date.getDate();
-    const dateString = dateNumber < 10 ? `0${dateNumber}` : dateNumber;
-    const monthNumber = date.getMonth() + 1;
-    const monthString = monthNumber < 10 ? `0${monthNumber}` : monthNumber;
+  #formatRow = (entry) => {
+    const datePart = this.#formatDate(entry.getDate());
+    const amountString = this.#formatAmount(entry.getAmount());
+    const amountPart = this.#formatAmountPart(entry, amountString);
+    const balance = entry.getResultingBalance();
+    const balancePart = this.#formatAmount(balance);
 
-    return `${dateString}/${monthString}/${date.getFullYear()}`;
+    return `${datePart}${amountPart}${balancePart}`;
   };
 
-  formatAmount = (amount) => {
+  #formatAmountPart = (entry, amountString) => {
+    return entry.getType() === "credit"
+      ? ` || ${amountString} || || `
+      : ` || || ${amountString} || `;
+  };
+
+  #formatDate = (date) => {
+    const dayOfMonthString = this.#ensureTwoDigitString(date.getDate());
+    const monthString = this.#ensureTwoDigitString(date.getMonth() + 1);
+
+    return `${dayOfMonthString}/${monthString}/${date.getFullYear()}`;
+  };
+
+  #formatAmount = (amount) => {
     const string = amount.toString();
     const length = string.length;
     const stringWithDot =
       string.slice(0, length - 2) + "." + string.slice(length - 2, length);
 
     return stringWithDot;
+  };
+
+  #ensureTwoDigitString = (number) => {
+    return number < 10 ? `0${number}` : number;
   };
 }
 
