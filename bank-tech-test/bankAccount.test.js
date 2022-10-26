@@ -16,25 +16,20 @@ describe("BankAccount", () => {
 
   it("credits the account and updates entries", () => {
     const account = new BankAccount();
-    expect(account.getEntries()).toEqual([]);
-    expect(account.getBalance()).toEqual(0);
-
-    Transaction.mockImplementation(() => {
-      return {
-        getType: () => "credit",
-        getAmount: () => 200,
-        getResultingBalance: () => 0 + 200,
-        getDate: () => new Date(2022, 0, 1),
-      };
+    const mockTransaction = {
+      getType: () => "credit",
+      getAmount: () => 200,
+      getResultingBalance: () => 0 + 200,
+      getDate: () => new Date(2022, 0, 1),
+    };
+    Transaction.mockImplementationOnce(() => {
+      return mockTransaction;
     });
 
     account.credit(200);
     expect(account.getBalance()).toEqual(200);
     expect(account.getEntries().length).toEqual(1);
-    expect(account.getEntries()[0].getType()).toEqual("credit");
-    expect(account.getEntries()[0].getAmount()).toEqual(200);
-    expect(account.getEntries()[0].getResultingBalance()).toEqual(200);
-    expect(account.getEntries()[0].getDate()).toEqual(new Date(2022, 0, 1));
+    expect(account.getEntries()[0]).toEqual(mockTransaction);
   });
 
   it("keeps track of multiple credits", () => {
@@ -42,32 +37,32 @@ describe("BankAccount", () => {
     expect(account.getEntries()).toEqual([]);
     expect(account.getBalance()).toEqual(0);
 
-    Transaction.mockImplementationOnce(() => {
-      return {
-        getType: () => "credit",
-        getAmount: () => 200,
-        getResultingBalance: () => 0 + 200,
-        getDate: () => new Date(2022, 0, 1),
-      };
-    });
+    const mockTransaction1 = {
+      // is this actually needed, or should I do as in the next test?
+      getType: () => "credit",
+      getAmount: () => 200,
+      getResultingBalance: () => 0 + 200,
+      getDate: () => new Date(2022, 0, 1),
+    };
+
+    const mockTransaction2 = {
+      getType: () => "credit",
+      getAmount: () => 100,
+      getResultingBalance: () => 200 + 100,
+      getDate: () => new Date(2022, 0, 2),
+    };
 
     Transaction.mockImplementationOnce(() => {
-      return {
-        getType: () => "credit",
-        getAmount: () => 100,
-        getResultingBalance: () => 200 + 100,
-        getDate: () => new Date(2022, 0, 2),
-      };
+      return mockTransaction1;
+    }).mockImplementationOnce(() => {
+      return mockTransaction2;
     });
 
     account.credit(200);
     account.credit(100);
     expect(account.getBalance()).toEqual(300);
     expect(account.getEntries().length).toEqual(2);
-    expect(account.getEntries()[1].getType()).toEqual("credit");
-    expect(account.getEntries()[1].getAmount()).toEqual(100);
-    expect(account.getEntries()[1].getResultingBalance()).toEqual(300);
-    expect(account.getEntries()[1].getDate()).toEqual(new Date(2022, 0, 2));
+    expect(account.getEntries()[1]).toEqual(mockTransaction2);
   });
 
   it("credits and debits the account", () => {
@@ -75,31 +70,26 @@ describe("BankAccount", () => {
     expect(account.getEntries()).toEqual([]);
     expect(account.getBalance()).toEqual(0);
 
-    Transaction.mockImplementationOnce(() => {
-      return {
-        getType: () => "credit",
-        getAmount: () => 200,
-        getResultingBalance: () => 0 + 200,
-        getDate: () => new Date(2022, 0, 1),
-      };
-    });
+    const mockCredit = {
+      // skipping any internal functionality as it's unimportant to bankAccount
+      notRelevant: "notRelevant",
+    };
+
+    const mockDebit = {
+      notRelevant: "notRelevant",
+    };
 
     Transaction.mockImplementationOnce(() => {
-      return {
-        getType: () => "debit",
-        getAmount: () => 50,
-        getResultingBalance: () => 200 - 50,
-        getDate: () => new Date(2022, 0, 2),
-      };
+      return mockCredit;
+    }).mockImplementationOnce(() => {
+      return mockDebit;
     });
 
     account.credit(200);
     account.debit(50);
     expect(account.getBalance()).toEqual(150);
     expect(account.getEntries().length).toEqual(2);
-    expect(account.getEntries()[1].getType()).toEqual("debit");
-    expect(account.getEntries()[1].getAmount()).toEqual(50);
-    expect(account.getEntries()[1].getResultingBalance()).toEqual(150);
-    expect(account.getEntries()[1].getDate()).toEqual(new Date(2022, 0, 2));
+    expect(account.getEntries()[0]).toEqual(mockCredit);
+    expect(account.getEntries()[1]).toEqual(mockDebit);
   });
 });
