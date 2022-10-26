@@ -1,40 +1,20 @@
-const Transaction = require("./transaction");
-
 class BankAccountEntry {
   constructor(initialBalance, type, amount) {
-    if (type != "credit" && type != "debit") {
-      throw "Error: Type should be 'debit' or 'credit'";
-    }
-    if (!Number.isInteger(amount)) {
-      throw "Error: Amount should be an integer";
-    }
-    if (amount <= 0) {
-      throw "Error: Amount should be positive";
-    }
-    this.transaction = new Transaction(type, amount);
-    if (type === "credit") {
-      this.resultingBalance = initialBalance + amount;
-    }
-    if (type === "debit") {
-      this.resultingBalance = initialBalance - amount;
-    }
+    this.#validateConstructorParameters(type, amount);
+    this.type = type;
+    this.amount = amount;
+    this.datetime = new Date();
+    // is use of a temporary variable for readability ok in a constructor?
+    const balanceChange = type === "credit" ? amount : -amount;
+    this.resultingBalance = initialBalance + balanceChange;
   }
 
   getType() {
-    if (this.transaction.isDebit() && this.transaction.isCredit()) {
-      throw "Error: transaction cannot be both credit and debit";
-    }
-    if (this.transaction.isDebit()) {
-      return "debit";
-    }
-    if (this.transaction.isCredit()) {
-      return "credit";
-    }
-    throw "Error: transaction should be either credit or debit";
+    return this.type;
   }
 
   getAmount() {
-    return this.transaction.getAmount();
+    return this.amount;
   }
 
   getResultingBalance() {
@@ -42,7 +22,22 @@ class BankAccountEntry {
   }
 
   getDate() {
-    return this.transaction.getTimeCreated();
+    return this.datetime;
+  }
+
+  // TODO: validate initialBalance as well
+  #validateConstructorParameters(type, amount) {
+    if (type != "credit" && type != "debit") {
+      throw new Error("Type should be 'debit' or 'credit'");
+    }
+
+    if (!Number.isInteger(amount)) {
+      throw new Error("Amount should be an integer");
+    }
+
+    if (amount <= 0) {
+      throw new Error("Amount should be positive");
+    }
   }
 }
 
