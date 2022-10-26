@@ -51,11 +51,9 @@ Design steps:
   is always positive, whether it's a withdrawal or deposit is identified with
   markers. The time of the transaction is recorded as well.
 - The account needs to have a current value. A history that keeps track of the
-  account balance after each transaction provides a full state of the account
-  at each transaction. This provides a record of the state over time.
-- A transaction has almost all data for an account entry but lacks a record of
-  the current balance, so an intermediate class to hold that state is created
-  (BankAccountEntry).
+  account balance after each transaction keeps track of the full state over time. This was a difficult design decision as it introduces some duplication of state between the current balance value and the state of the account in the latest history. I made the decision to include the account balance with each transaction mainly for two reasons:
+  1. Keeping track of the actual state of the account at each transaction to avoid mismatch between transaction and balance at the time, in case a transaction before it is modified for any reason
+  2. It would provide a history of the state of the account at each transaction which can be referenced without the need for recalculating the account history
 - A formatter that creates a bank statement string works on a class to convert
   the entry history into a formatted text string.
 
@@ -63,10 +61,23 @@ The design below has been slightly modified during implementation.
 
 ![Excalidraw chart](./docs/initial-class-design.png)
 
-### TDD classes
+## TDD classes
 
 Testing started from the smallest class, Transaction, and build from that. A
 suggested better approach should be starting from the integration test and
 working from there.
 
 ![Excalidraw chart](./docs/tests.png)
+
+## Refactor
+
+Detailed feedback on the code indicated many areas where refactoring was needed
+or would be useful.
+
+- BankAccountEntry and Transaction were very closely coupled and have been
+  combined. This simplified the code significantly
+- Extracting some functions, like constructor parameters validation for
+  improved readability
+- Some better spacing between if statements for readability
+- Throw correction to throw error instead of string
+- TODO: Test update for bankAccount, unit test for bankStatementFromatter

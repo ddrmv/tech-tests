@@ -1,9 +1,9 @@
-class BankAccountFormatter {
+class BankStatementFormatter {
   constructor(account) {
     this.account = account;
   }
 
-  formatBankAccount() {
+  formatBankStatement() {
     let statement = "";
 
     for (let i = this.account.getEntries().length - 1; i >= 0; i--) {
@@ -39,4 +39,4 @@ class BankAccountFormatter {
   };
 }
 
-module.exports = BankAccountFormatter;
+module.exports = BankStatementFormatter;

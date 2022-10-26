@@ -1,4 +1,4 @@
-class BankAccountEntry {
+class Transaction {
   constructor(initialBalance, type, amount) {
     this.#validateConstructorParameters(type, amount);
     this.type = type;
@@ -41,4 +41,4 @@ class BankAccountEntry {
   }
 }
 
-module.exports = BankAccountEntry;
+module.exports = Transaction;

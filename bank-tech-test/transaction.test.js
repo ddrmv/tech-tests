@@ -1,4 +1,4 @@
-const BankAccountEntry = require("./bankAccountEntry");
+const Transaction = require("./transaction");
 
 const testMockDate = (className, instance) => {
   let mockDate = jest
@@ -10,34 +10,34 @@ const testMockDate = (className, instance) => {
   mockDate.mockRestore();
 };
 
-describe("BankAccountEntry", () => {
+describe("Transaction", () => {
   it("throws an error if amount is a string", () => {
     expect(() => {
-      new BankAccountEntry(0, "debit", "5");
+      new Transaction(0, "debit", "5");
     }).toThrow("Amount should be an integer");
   });
 
   it("throws an error if amount is a float", () => {
     expect(() => {
-      new BankAccountEntry(0, "debit", 5.5);
+      new Transaction(0, "debit", 5.5);
     }).toThrow("Amount should be an integer");
   });
 
   it("throws an error if amount is negative", () => {
     expect(() => {
-      new BankAccountEntry(0, "debit", -10);
+      new Transaction(0, "debit", -10);
     }).toThrow("Amount should be positive");
   });
 
   it("throws an error if amount is zero", () => {
     expect(() => {
-      new BankAccountEntry(0, "debit", 0);
+      new Transaction(0, "debit", 0);
     }).toThrow("Amount should be positive");
   });
 
   it("throws an error if type is not 'credit' or 'debit'", () => {
     expect(() => {
-      new BankAccountEntry(0, "invalid value", 10);
+      new Transaction(0, "invalid value", 10);
     }).toThrow("Type should be 'debit' or 'credit'");
   });
 
@@ -45,25 +45,25 @@ describe("BankAccountEntry", () => {
     const initialBalance = 1000;
     const type = "credit";
     const amount = 200;
-    entry = new BankAccountEntry(initialBalance, type, amount);
+    entry = new Transaction(initialBalance, type, amount);
 
     expect(entry.getType()).toEqual("credit");
     expect(entry.getAmount()).toEqual(200);
     expect(entry.getResultingBalance()).toEqual(1200);
     expect(entry.getDate()).toBeDefined();
-    testMockDate(BankAccountEntry, entry);
+    testMockDate(Transaction, entry);
   });
 
   it("creates a debit account entry", () => {
     const initialBalance = 1000;
     const type = "debit";
     const amount = 200;
-    entry = new BankAccountEntry(initialBalance, type, amount);
+    entry = new Transaction(initialBalance, type, amount);
 
     expect(entry.getType()).toEqual("debit");
     expect(entry.getAmount()).toEqual(200);
     expect(entry.getResultingBalance()).toEqual(800);
     expect(entry.getDate()).toBeDefined();
-    testMockDate(BankAccountEntry, entry);
+    testMockDate(Transaction, entry);
   });
 });

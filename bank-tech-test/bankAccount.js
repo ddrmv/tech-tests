@@ -1,4 +1,4 @@
-const BankAccountEntry = require("./bankAccountEntry");
+const Transaction = require("./transaction");
 
 class BankAccount {
   constructor() {
@@ -15,13 +15,13 @@ class BankAccount {
   }
 
   credit(amount) {
-    const newEntry = new BankAccountEntry(this.balance, "credit", amount);
+    const newEntry = new Transaction(this.balance, "credit", amount);
     this.entries.push(newEntry);
     this.balance += amount;
   }
 
   debit(amount) {
-    const newEntry = new BankAccountEntry(this.balance, "debit", amount);
+    const newEntry = new Transaction(this.balance, "debit", amount);
     this.entries.push(newEntry);
     this.balance -= amount;
   }

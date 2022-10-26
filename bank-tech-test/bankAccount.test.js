@@ -1,10 +1,10 @@
-const BankAccountEntry = require("./bankAccountEntry");
+const Transaction = require("./transaction");
 const BankAccount = require("./bankAccount");
 
-jest.mock("./bankAccountEntry");
+jest.mock("./transaction");
 
 afterEach(() => {
-  BankAccountEntry.mockClear();
+  Transaction.mockClear();
 });
 
 describe("BankAccount", () => {
@@ -19,7 +19,7 @@ describe("BankAccount", () => {
     expect(account.getEntries()).toEqual([]);
     expect(account.getBalance()).toEqual(0);
 
-    BankAccountEntry.mockImplementation(() => {
+    Transaction.mockImplementation(() => {
       return {
         getType: () => "credit",
         getAmount: () => 200,
@@ -42,7 +42,7 @@ describe("BankAccount", () => {
     expect(account.getEntries()).toEqual([]);
     expect(account.getBalance()).toEqual(0);
 
-    BankAccountEntry.mockImplementationOnce(() => {
+    Transaction.mockImplementationOnce(() => {
       return {
         getType: () => "credit",
         getAmount: () => 200,
@@ -51,7 +51,7 @@ describe("BankAccount", () => {
       };
     });
 
-    BankAccountEntry.mockImplementationOnce(() => {
+    Transaction.mockImplementationOnce(() => {
       return {
         getType: () => "credit",
         getAmount: () => 100,
@@ -75,7 +75,7 @@ describe("BankAccount", () => {
     expect(account.getEntries()).toEqual([]);
     expect(account.getBalance()).toEqual(0);
 
-    BankAccountEntry.mockImplementationOnce(() => {
+    Transaction.mockImplementationOnce(() => {
       return {
         getType: () => "credit",
         getAmount: () => 200,
@@ -84,7 +84,7 @@ describe("BankAccount", () => {
       };
     });
 
-    BankAccountEntry.mockImplementationOnce(() => {
+    Transaction.mockImplementationOnce(() => {
       return {
         getType: () => "debit",
         getAmount: () => 50,
