@@ -1,5 +1,5 @@
 const BankAccount = require("../bankAccount");
-const Transaction = require("../transaction");
+const BankAccountEntry = require("../bankAccountEntry");
 const BankAccountFormatter = require("../bankAccountFormatter");
 
 describe("BankAccountFormatter", () => {
@@ -10,7 +10,7 @@ describe("BankAccountFormatter", () => {
     account.debit(500_00); // on 14/12/2023
 
     let mockDate = jest
-      .spyOn(Transaction.prototype, "getTimeCreated")
+      .spyOn(BankAccountEntry.prototype, "getDate")
       .mockImplementationOnce(() => new Date(2023, 11, 14))
       .mockImplementationOnce(() => new Date(2023, 0, 13))
       .mockImplementationOnce(() => new Date(2023, 0, 9));
