@@ -14,8 +14,12 @@ describe("Gilded Rose", () => {
     expect(items).toEqual([]);
   });
 
+  // it("throws error if passed sellIn is not an integer", () => {
+
+  // });
+
   it("returns a list of items", () => {
-    const gildedRose = new Shop([new Item("item name", 0, 0)]);
+    const gildedRose = new Shop([new StandardItem("item name", 0, 0)]);
     const items = gildedRose.updateQuality();
     expect(items.length).toBe(1);
     expect(items[0].name).toBe("item name");

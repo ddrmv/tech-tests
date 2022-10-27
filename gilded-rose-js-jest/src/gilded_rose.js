@@ -1,4 +1,7 @@
 // do not change class Item
+const DEFAULT_MIN_QUALITY = 0;
+const DEFAULT_MAX_QUALITY = 50;
+
 class Item {
   constructor(name, sellIn, quality) {
     this.name = name;
@@ -7,35 +10,51 @@ class Item {
   }
 }
 
-const doubleIfExpired = (sellIn, change) => {
-  return sellIn < 0 ? 2 * change : change;
-};
+class ItemWithUtilities extends Item {
+  // #validateConstructorParameters = (sellIn, quality) => {};
 
-class StandardItem extends Item {
-  updateQuality = () => {
-    this.quality -= doubleIfExpired(this.sellIn, 1);
-    if (this.quality < 0) {
-      this.quality = 0;
+  byDoubleIfExpired = (change) => {
+    return this.sellIn < 0 ? 2 * change : change;
+  };
+
+  changeQualityWithRate = (rate) => {
+    this.quality += this.byDoubleIfExpired(rate);
+  };
+
+  enforceMinMax = (min = DEFAULT_MIN_QUALITY, max = DEFAULT_MAX_QUALITY) => {
+    if (this.quality < min) {
+      this.quality = min;
     }
+    if (this.quality > max) {
+      this.quality = max;
+    }
+  };
+
+  enforceMinMaxAndAge = () => {
+    this.enforceMinMax();
     this.sellIn -= 1;
   };
 }
 
-class CheeseItem extends Item {
+class StandardItem extends ItemWithUtilities {
   updateQuality = () => {
-    this.quality += doubleIfExpired(this.sellIn, 1);
-    if (this.quality > 50) {
-      this.quality = 50;
-    }
-    this.sellIn -= 1;
+    this.changeQualityWithRate(-1);
+    this.enforceMinMaxAndAge();
   };
 }
 
-class SulfurasItem extends Item {
+class CheeseItem extends ItemWithUtilities {
+  updateQuality = () => {
+    this.changeQualityWithRate(1);
+    this.enforceMinMaxAndAge();
+  };
+}
+
+class SulfurasItem extends ItemWithUtilities {
   updateQuality = () => {};
 }
 
-class TicketItem extends Item {
+class TicketItem extends ItemWithUtilities {
   updateQuality = () => {
     if (this.sellIn > 10) {
       this.quality += 1;
@@ -46,10 +65,7 @@ class TicketItem extends Item {
     } else {
       this.quality = 0;
     }
-    if (this.quality > 50) {
-      this.quality = 50;
-    }
-    this.sellIn -= 1;
+    this.enforceMinMaxAndAge();
   };
 }
 
@@ -60,26 +76,8 @@ class Shop {
 
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      const item = this.items[i];
-      // new code
-      if (item instanceof StandardItem) {
-        item.updateQuality();
-        continue;
-      }
-      if (item instanceof CheeseItem) {
-        item.updateQuality();
-        continue;
-      }
-      if (item instanceof SulfurasItem) {
-        item.updateQuality();
-        continue;
-      }
-      if (item instanceof TicketItem) {
-        item.updateQuality();
-        continue;
-      }
+      this.items[i].updateQuality();
     }
-
     return this.items;
   }
 }
