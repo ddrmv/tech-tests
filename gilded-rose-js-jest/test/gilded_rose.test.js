@@ -4,6 +4,7 @@ const {
   CheeseItem,
   SulfurasItem,
   TicketItem,
+  ConjuredItem,
   Shop,
 } = require("../src/gilded_rose");
 
@@ -13,10 +14,6 @@ describe("Gilded Rose", () => {
     const items = gildedRose.updateQuality();
     expect(items).toEqual([]);
   });
-
-  // it("throws error if passed sellIn is not an integer", () => {
-
-  // });
 
   it("returns a list of items", () => {
     const gildedRose = new Shop([new StandardItem("item name", 0, 0)]);
@@ -110,6 +107,30 @@ describe("Gilded Rose", () => {
     expect(items[0].quality).toBe(0);
   });
 
+  it("decreases conjured item quality by two if not expired", () => {
+    const newItem = new ConjuredItem("conjured item", 10, 20);
+    const shop = new Shop([newItem]);
+    const items = shop.updateQuality();
+    expect(items[0].sellIn).toBe(9);
+    expect(items[0].quality).toBe(18);
+  });
+
+  it("decreases conjured item quality by four if expired", () => {
+    const newItem = new ConjuredItem("conjured item", -1, 10);
+    const shop = new Shop([newItem]);
+    const items = shop.updateQuality();
+    expect(items[0].sellIn).toBe(-2);
+    expect(items[0].quality).toBe(6);
+  });
+
+  it("decreases conjured item quality by four if expired but not below 0", () => {
+    const newItem = new ConjuredItem("conjured item", -1, 3);
+    const shop = new Shop([newItem]);
+    const items = shop.updateQuality();
+    expect(items[0].sellIn).toBe(-2);
+    expect(items[0].quality).toBe(0);
+  });
+
   it("works on day 1 (1 update) the same as on legacy code", () => {
     const items = [
       new StandardItem("+5 Dexterity Vest", 10, 20),
@@ -120,9 +141,7 @@ describe("Gilded Rose", () => {
       new TicketItem("Backstage passes to a TAFKAL80ETC concert", 15, 20),
       new TicketItem("Backstage passes to a TAFKAL80ETC concert", 10, 49),
       new TicketItem("Backstage passes to a TAFKAL80ETC concert", 5, 49),
-
-      // This Conjured item does not work properly yet
-      // new Item("Conjured Mana Cake", 3, 6),
+      new ConjuredItem("Conjured Mana Cake", 3, 6),
     ];
     const gildedRose = new Shop(items);
     gildedRose.updateQuality();
@@ -142,8 +161,8 @@ describe("Gilded Rose", () => {
         "Sulfuras, Hand of Ragnaros, -1, 80" +
         "Backstage passes to a TAFKAL80ETC concert, 14, 21" +
         "Backstage passes to a TAFKAL80ETC concert, 9, 50" +
-        "Backstage passes to a TAFKAL80ETC concert, 4, 50"
-      // "Conjured Mana Cake, 2, 5"
+        "Backstage passes to a TAFKAL80ETC concert, 4, 50" +
+        "Conjured Mana Cake, 2, 4"
     );
   });
 });

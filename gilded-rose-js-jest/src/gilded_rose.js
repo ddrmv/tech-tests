@@ -11,8 +11,6 @@ class Item {
 }
 
 class ItemWithUtilities extends Item {
-  // #validateConstructorParameters = (sellIn, quality) => {};
-
   byDoubleIfExpired = (change) => {
     return this.sellIn < 0 ? 2 * change : change;
   };
@@ -69,6 +67,13 @@ class TicketItem extends ItemWithUtilities {
   };
 }
 
+class ConjuredItem extends ItemWithUtilities {
+  updateQuality = () => {
+    this.changeQualityWithRate(-2);
+    this.enforceMinMaxAndAge();
+  };
+}
+
 class Shop {
   constructor(items = []) {
     this.items = items;
@@ -88,5 +93,6 @@ module.exports = {
   CheeseItem,
   SulfurasItem,
   TicketItem,
+  ConjuredItem,
   Shop,
 };
