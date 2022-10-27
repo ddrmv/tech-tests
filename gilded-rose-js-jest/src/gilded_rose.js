@@ -7,6 +7,52 @@ class Item {
   }
 }
 
+const doubleIfExpired = (sellIn, change) => {
+  return sellIn < 0 ? 2 * change : change;
+};
+
+class StandardItem extends Item {
+  updateQuality = () => {
+    this.quality -= doubleIfExpired(this.sellIn, 1);
+    if (this.quality < 0) {
+      this.quality = 0;
+    }
+    this.sellIn -= 1;
+  };
+}
+
+class CheeseItem extends Item {
+  updateQuality = () => {
+    this.quality += doubleIfExpired(this.sellIn, 1);
+    if (this.quality > 50) {
+      this.quality = 50;
+    }
+    this.sellIn -= 1;
+  };
+}
+
+class SulfurasItem extends Item {
+  updateQuality = () => {};
+}
+
+class TicketItem extends Item {
+  updateQuality = () => {
+    if (this.sellIn > 10) {
+      this.quality += 1;
+    } else if (this.sellIn > 5) {
+      this.quality += 2;
+    } else if (this.sellIn > 0) {
+      this.quality += 3;
+    } else {
+      this.quality = 0;
+    }
+    if (this.quality > 50) {
+      this.quality = 50;
+    }
+    this.sellIn -= 1;
+  };
+}
+
 class Shop {
   constructor(items = []) {
     this.items = items;
@@ -15,51 +61,22 @@ class Shop {
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i];
-      if (
-        item.name != "Aged Brie" &&
-        item.name != "Backstage passes to a TAFKAL80ETC concert"
-      ) {
-        if (item.quality > 0) {
-          if (item.name != "Sulfuras, Hand of Ragnaros") {
-            item.quality = item.quality - 1;
-          }
-        }
-      } else {
-        if (item.quality < 50) {
-          item.quality = item.quality + 1;
-          if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
-            if (item.sellIn < 11) {
-              if (item.quality < 50) {
-                item.quality = item.quality + 1;
-              }
-            }
-            if (item.sellIn < 6) {
-              if (item.quality < 50) {
-                item.quality = item.quality + 1;
-              }
-            }
-          }
-        }
+      // new code
+      if (item instanceof StandardItem) {
+        item.updateQuality();
+        continue;
       }
-      if (item.name != "Sulfuras, Hand of Ragnaros") {
-        item.sellIn = item.sellIn - 1;
+      if (item instanceof CheeseItem) {
+        item.updateQuality();
+        continue;
       }
-      if (item.sellIn < 0) {
-        if (item.name != "Aged Brie") {
-          if (item.name != "Backstage passes to a TAFKAL80ETC concert") {
-            if (item.quality > 0) {
-              if (item.name != "Sulfuras, Hand of Ragnaros") {
-                item.quality = item.quality - 1;
-              }
-            }
-          } else {
-            item.quality = item.quality - item.quality;
-          }
-        } else {
-          if (item.quality < 50) {
-            item.quality = item.quality + 1;
-          }
-        }
+      if (item instanceof SulfurasItem) {
+        item.updateQuality();
+        continue;
+      }
+      if (item instanceof TicketItem) {
+        item.updateQuality();
+        continue;
       }
     }
 
@@ -69,5 +86,9 @@ class Shop {
 
 module.exports = {
   Item,
+  StandardItem,
+  CheeseItem,
+  SulfurasItem,
+  TicketItem,
   Shop,
 };
