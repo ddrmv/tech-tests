@@ -1,2 +1,4 @@
-bank-tech-test/node_modules/
-bank-tech-test/coverage/
+/bank-tech-test/node_modules/
+/bank-tech-test/coverage/
+/gilded-rose-js-jest/node_modules
+/gilded-rose-js-jest/coverage/
