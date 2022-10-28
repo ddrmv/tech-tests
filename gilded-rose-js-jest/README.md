@@ -65,3 +65,38 @@ To generate test coverage report
 ```sh
 npm run test:coverage
 ```
+
+## Refactor process
+
+The main goal of the refactor was to test drive any changes to the code.
+
+The first step was installing the legacy code, followed by applying standard
+code formatting by Prettier and installing and running eslint.
+
+After using the automatic formatting tools was the start of organising the
+code in more sensible abstractions. In order to ensure the code doesn't break,
+the texttest_fixture was used to create example output after one update and
+that was converted to a jest test.
+
+Next, after writing some tests for standard items, the Item class was extended
+with polymorphism. This allowed to keep the unique update logic within the
+item it was associated with. The approach to gradually replace the logic used
+for each type of item. This was done by checking if it belonged to the new
+class and using the refactored code for it, skipping the legacy update code for
+that iteration.
+
+After the standard item, other item types were abstracted one by one. The basic
+case was implemented for each of them, then more test were added for special
+cases: after expiry, on expiry.
+
+Once all classes were implemented, further tests were added to ensure all of
+them work correctly. Then the legacy code was removed. This was the first
+refactor iteration.
+
+Once the new overall abstraction structure was implemented the code could be
+further and more easily improved. More functions were abstracted to avoid
+repetition, some better names were selected, an intermediary ItemWithUtilities
+class was created to allow for common actions on items to be contained in it
+without altering the Item class itself.
+
+After the legacy code refactor adding the new feature was very straightforward.

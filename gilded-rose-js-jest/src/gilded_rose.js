@@ -1,4 +1,3 @@
-// do not change class Item
 const DEFAULT_MIN_QUALITY = 0;
 const DEFAULT_MAX_QUALITY = 50;
 

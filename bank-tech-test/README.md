@@ -41,7 +41,7 @@ Goals:
 
 - Goals are to create uncoupled classes with appropriate levels of abstraction
 - Separate view from content
-- Have good naming and structre
+- Have good naming and structure
 - TDD everything
 - Match the acceptance criteria output exactly
 
@@ -57,7 +57,7 @@ Design steps:
 - A formatter that creates a bank statement string works on a class to convert
   the entry history into a formatted text string.
 
-The design below has been slightly modified during implementation.
+The design below has been slightly modified during implementation and further modified after receiving feedback.
 
 ![Excalidraw chart](./docs/initial-class-design.png)
 
@@ -80,4 +80,5 @@ or would be useful.
   improved readability
 - Some better spacing between if statements for readability
 - Throw correction to throw error instead of string
-- TODO: Test update for bankAccount, unit test for bankStatementFromatter
+- Update test for bankAccount to ensure testing the class instead of the mock
+- Add unit test for bankStatementFormatter
