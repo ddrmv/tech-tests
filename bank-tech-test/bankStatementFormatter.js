@@ -13,12 +13,7 @@ class BankStatementFormatter {
       row == 0 ? {} : (statement += "\n");
     }
 
-    // is coded readidibility step preferred, or 1 line + comment as below?
-    const header = "date || credit || debit || balance";
-    return `${header}\n${statement}`;
-
-    // prepend header to statement
-    // return `date || credit || debit || balance\n${statement}`;
+    return `date || credit || debit || balance\n${statement}`;
   }
 
   #formatRow = (entry) => {

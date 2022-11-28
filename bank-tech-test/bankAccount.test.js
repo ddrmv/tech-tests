@@ -38,7 +38,6 @@ describe("BankAccount", () => {
     expect(account.getBalance()).toEqual(0);
 
     const mockTransaction1 = {
-      // is this actually needed, or should I do as in the next test?
       getType: () => "credit",
       getAmount: () => 200,
       getResultingBalance: () => 0 + 200,
@@ -71,7 +70,6 @@ describe("BankAccount", () => {
     expect(account.getBalance()).toEqual(0);
 
     const mockCredit = {
-      // skipping any internal functionality as it's unimportant to bankAccount
       notRelevant: "notRelevant",
     };
 
