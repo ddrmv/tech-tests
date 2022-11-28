@@ -1,4 +1,4 @@
-## Specification
+# Specification
 
 ### Requirements
 
@@ -23,13 +23,22 @@ date || credit || debit || balance
 10/01/2023 || 1000.00 || || 1000.00
 ```
 
+# Solution
+
 ## Installation
 
 - To run the project, you need node installed
 - Download or git clone the repository
-- `cd bank-tech-test`
-- `npm install`
-- `npx run jest` to run the tests
+
+```bash
+cd bank-tech-test
+
+npm install
+
+# to run tests
+npx run jest
+```
+
 - There are only classes provided, no interface, as per the specs.
   Output can be read in the tests
 
@@ -57,28 +66,16 @@ Design steps:
 - A formatter that creates a bank statement string works on a class to convert
   the entry history into a formatted text string.
 
-The design below has been slightly modified during implementation and further modified after receiving feedback.
-
-![Excalidraw chart](./docs/initial-class-design.png)
-
 ## TDD classes
 
 Testing started from the smallest class, Transaction, and build from that. A
 suggested better approach should be starting from the integration test and
 working from there.
 
-![Excalidraw chart](./docs/tests.png)
+![Excalidraw chart](https://i.imgur.com/V8TloHA.png)
 
-## Refactor
+## Use of the classes with output
 
-Detailed feedback on the code indicated many areas where refactoring was needed
-or would be useful.
+The output matches the specs for acceptance (running in node):
 
-- BankAccountEntry and Transaction were very closely coupled and have been
-  combined. This simplified the code significantly
-- Extracting some functions, like constructor parameters validation for
-  improved readability
-- Some better spacing between if statements for readability
-- Throw correction to throw error instead of string
-- Update test for bankAccount to ensure testing the class instead of the mock
-- Add unit test for bankStatementFormatter
+![Output](https://i.imgur.com/w3dkrxz.png)
